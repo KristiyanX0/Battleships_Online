@@ -70,6 +70,7 @@ public class CommandExecutor {
         return switch (arguments[0]) {
             case GAME -> deleteGame(arguments[1]);
             case PROFILE -> deleteProfile(arguments[1]);
+            default -> UNKNOWN_COMMAND;
         };
     }
 
@@ -87,6 +88,7 @@ public class CommandExecutor {
         return switch (arguments[0]) {
             case GAME -> createGame(arguments[1]);
             case PROFILE -> createProfile(arguments[1]);
+            default -> UNKNOWN_COMMAND;
         };
     }
 
