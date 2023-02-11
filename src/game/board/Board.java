@@ -1,33 +1,27 @@
 package game.board;
 
 import exception.ShipAlreadyExistException;
-import game.Position.Position;
+import game.position.Position;
 import game.ship.Ship;
-import operations.SetOperations;
-
-import java.util.ArrayList;
+import operations.SetOperation;
 import java.util.HashMap;
-import java.util.Optional;
 
 public class Board {
     public static int SIZE = 10;
     private final HashMap<Position, Ship> ships = new HashMap<>();
-    private final ArrayList<ArrayList<Integer>> board = new ArrayList<>(SIZE);
 
-    public Board() {
-        board.addAll(new ArrayList<>(SIZE));
-    }
+    Matrix matrix = new Matrix();
 
     public void addShip(Ship ship) {
-        if (!SetOperations.intersection(ship.getPositions(), ships.keySet()).isEmpty()) {
+        if (!SetOperation.intersection(ship.getPositions(), ships.keySet()).isEmpty()) {
             throw new ShipAlreadyExistException();
         } else {
             for (var i : ship.getPositions()) {
                 ships.put(i, ship);
             }
         }
+        matrix.update(ships);
     }
-
     /**
      * @param pos position
      * @return TRUE - currently hit
@@ -38,6 +32,12 @@ public class Board {
         if (!ships.containsKey(pos)) {
             return false;
         }
-        return ships.get(pos).setDamage(pos);
+        boolean output = ships.get(pos).setDamage(pos);
+        matrix.update(ships);
+        return output;
+    }
+
+    public Matrix getMatrix() {
+        return matrix;
     }
 }

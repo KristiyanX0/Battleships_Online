@@ -1,4 +1,7 @@
 Legend:
-* - ship field
-X - hit ship field
-О - hit empty field
+'-' - ship field
+'X' - hit ship field
+'c' - Carrier
+'b' - Battleship
+'d' - Destroyer
+'s' - Submarine

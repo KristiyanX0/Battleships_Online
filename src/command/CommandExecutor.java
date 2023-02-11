@@ -2,6 +2,7 @@ package command;
 
 import game.BattleshipsAPI;
 
+
 public class CommandExecutor {
 
     /* ===================== FIRST COMMAND ======================= */
@@ -18,6 +19,11 @@ public class CommandExecutor {
     private static final String GAME = "game";
     private static final String PROFILE = "profile";
     /* =========================================================== */
+
+    /* ===================== INGAME COMMAND ====================== */
+    private static final String EXIT = "exit";
+    /* =========================================================== */
+
 
     private static final String UNKNOWN_COMMAND = "Unknown command";
     public static final String DISCONNECTED = "Disconnected from the server";
@@ -37,6 +43,7 @@ public class CommandExecutor {
             case LOAD -> load(cmd.arguments());
             case DELETE -> delete(cmd.arguments());
             case SCORE_BOARD -> scoreBoard(cmd.arguments());
+            //case EXIT ->
             default -> UNKNOWN_COMMAND;
         };
     }

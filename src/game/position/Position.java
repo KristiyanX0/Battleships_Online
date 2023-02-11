@@ -1,4 +1,4 @@
-package game.Position;
+package game.position;
 
 import exception.InvalidPositionException;
 
