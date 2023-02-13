@@ -1,12 +1,14 @@
 package game.board;
 
-import game.position.Position;
-import game.position.PositionState;
+import game.ship.position.Position;
+import game.ship.position.PositionState;
 import game.ship.Ship;
 
+import java.awt.*;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Matrix {
+public class Matrix implements Serializable {
 
     public static final char EMPTY = '-';
     public static final char DAMAGE = 'X';

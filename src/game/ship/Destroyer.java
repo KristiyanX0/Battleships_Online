@@ -1,8 +1,8 @@
 package game.ship;
 
-import game.position.Position;
-import game.ship.constants.Direction;
-import game.ship.constants.ShipType;
+import game.ship.position.Position;
+import constants.Direction;
+import constants.ShipType;
 
 public class Destroyer extends Ship {
     protected Destroyer(ShipType shipType, Direction direction, Position position, int size) {

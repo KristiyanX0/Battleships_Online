@@ -1,12 +1,14 @@
 package game.board;
 
 import exception.ShipAlreadyExistException;
-import game.position.Position;
+import game.ship.position.Position;
 import game.ship.Ship;
 import operations.SetOperation;
+
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Board {
+public class Board implements Serializable {
     public static int SIZE = 10;
     private final HashMap<Position, Ship> ships = new HashMap<>();
 
@@ -35,6 +37,10 @@ public class Board {
         boolean output = ships.get(pos).setDamage(pos);
         matrix.update(ships);
         return output;
+    }
+
+    public boolean hit(String str) {
+        return hit(Position.of(str));
     }
 
     public Matrix getMatrix() {

@@ -1,7 +1,10 @@
 package command;
 
 import game.BattleshipsAPI;
+import game.Profile;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CommandExecutor {
 
@@ -9,10 +12,7 @@ public class CommandExecutor {
     private static final String CREATE = "create";
     private static final String LOGIN = "login";
     private static final String JOIN = "join";
-    private static final String SAVED = "saved";
-    private static final String LOAD = "load";
     private static final String DELETE = "delete";
-    private static final String SCORE_BOARD = "score";
     /* =========================================================== */
 
     /* ========== SECOND COMMAND (DEPENDS ON FIRST ONE) ========== */
@@ -24,53 +24,39 @@ public class CommandExecutor {
     private static final String EXIT = "exit";
     /* =========================================================== */
 
-
     private static final String UNKNOWN_COMMAND = "Unknown command";
     public static final String DISCONNECTED = "Disconnected from the server";
 
     private final BattleshipsAPI game;
+    private final Map<String, Profile> clients = new ConcurrentHashMap<>();
+    public void addClient(String clientId, Profile profile) {
+        clients.put(clientId, profile);
+    }
+    public void removeClient(String clientId) {
+        clients.remove(clientId);
+    }
 
     public CommandExecutor(BattleshipsAPI game) {
         this.game = game;
     }
-
-    public String execute(Command cmd) {
+    public String execute(Profile clientProfile, Command cmd) {
         return switch (cmd.command()) {
             case CREATE -> create(cmd.arguments());
             case LOGIN -> login(cmd.arguments());
             case JOIN -> join(cmd.arguments());
-            case SAVED -> getSavedGame(cmd.arguments());
-            case LOAD -> load(cmd.arguments());
             case DELETE -> delete(cmd.arguments());
-            case SCORE_BOARD -> scoreBoard(cmd.arguments());
             //case EXIT ->
             default -> UNKNOWN_COMMAND;
         };
     }
-
-    private String load(String[] arguments) {
-
-        return "* GAME LOADED! *";
-    }
-
     private String join(String[] arguments) {
 
         return String.format("* JOINED: '%s' *", arguments[0]);
     }
 
     private String login(String[] arguments) {
-
-        return String.format("* JOINED: '%s' *", arguments[0]);
-    }
-
-    private String scoreBoard(String[] arguments) {
-
-        return "* BOARD DISPLAYED *";
-    }
-
-    private String getSavedGame(String[] arguments) {
-
-        return String.format("* GAME CONTINUED: '%s' *", arguments[0]);
+        //profile = game.login(arguments[0], arguments[1]);
+        return String.format("* LOGED: '%s' *", arguments[0]);
     }
 
     private String delete(String[] arguments) {
@@ -94,13 +80,13 @@ public class CommandExecutor {
     private String create(String[] arguments) {
         return switch (arguments[0]) {
             case GAME -> createGame(arguments[1]);
-            case PROFILE -> createProfile(arguments[1]);
+            case PROFILE -> createProfile(arguments[1], arguments[2]);
             default -> UNKNOWN_COMMAND;
         };
     }
 
-    private String createProfile(String name) {
-
+    private String createProfile(String name, String password) {
+        game.createProfile(name, password);
         return "* NEW PROFILE SUCCESSFULLY CREATED *";
     }
 

@@ -4,9 +4,10 @@ import command.CommandExecutor;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.util.Scanner;
+
+import java.nio.ByteBuffer;
 
 public class Client {
     private final int serverPort;

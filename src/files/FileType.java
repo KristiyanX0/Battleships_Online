@@ -1,5 +1,5 @@
 package files;
 
 public enum FileType {
-    LEGEND,HELP
+    LEGEND,HELP,GAME,PROFILE
 }

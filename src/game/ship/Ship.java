@@ -1,11 +1,11 @@
 package game.ship;
 
 import exception.InvalidMappingException;
-import game.position.Position;
-import game.position.PositionState;
-import game.ship.constants.Direction;
-import game.ship.constants.ShipSize;
-import game.ship.constants.ShipType;
+import game.ship.position.Position;
+import game.ship.position.PositionState;
+import constants.Direction;
+import constants.ShipSize;
+import constants.ShipType;
 
 import java.util.*;
 

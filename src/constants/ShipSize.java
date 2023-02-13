@@ -1,4 +1,4 @@
-package game.ship.constants;
+package constants;
 
 public class ShipSize {
     public static int CARRIER = 5;

@@ -1,4 +1,4 @@
-package game.ship.constants;
+package constants;
 
 public enum Direction {
     HORIZONTAL,VERTICAL

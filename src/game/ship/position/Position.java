@@ -1,4 +1,4 @@
-package game.position;
+package game.ship.position;
 
 import exception.InvalidPositionException;
 
