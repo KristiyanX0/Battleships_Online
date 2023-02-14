@@ -21,6 +21,8 @@ public class BattleshipsAPI implements Serializable {
     public void join(String gameName, String playerName) {
         if (!games.containsKey(gameName)) {
             throw new GameDoesntExistException();
+        } else if (this.games.get(gameName).getPlayer1().equals(playerName)) {
+            throw new GamePlayerAlredyDefined("Game already defined!");
         } else {
             this.games.get(gameName).add(playerName);
         }
@@ -44,7 +46,7 @@ public class BattleshipsAPI implements Serializable {
 
     public StringBuilder list() {
         int i = 1;
-        StringBuilder format = new StringBuilder("");
+        StringBuilder format = new StringBuilder();
         for (var x : games.entrySet()) {
             format.append(String.format("%s: Game - %s, Creator: %s, Joined Count: %s%s", i++, x.getKey(),
                     x.getValue().getPlayer1(), x.getValue().getJoinedCount(), System.lineSeparator()));

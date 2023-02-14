@@ -2,9 +2,10 @@ package game.ship.position;
 
 import exception.InvalidPositionException;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Position {
+public class Position implements Serializable {
     int x;
     int y;
 

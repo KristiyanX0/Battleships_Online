@@ -8,9 +8,10 @@ import constants.Direction;
 import constants.ShipSize;
 import constants.ShipType;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class Ship {
+public abstract class Ship implements Serializable {
     private final Direction DIRECTION;
     private final HashMap<Position, PositionState> positions = new HashMap<>();
     private final int SIZE;
@@ -80,16 +81,8 @@ public abstract class Ship {
         return false;
     }
 
-    public boolean setDamage(int x, int y) {
-        return setDamage(Position.of(x,y));
-    }
-
     public Set<Position> getPositions() {
         return Collections.unmodifiableSet(positions.keySet());
-    }
-
-    public int size() {
-        return SIZE;
     }
 
     public ShipType type() {

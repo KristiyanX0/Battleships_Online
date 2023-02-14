@@ -2,10 +2,11 @@
 import game.BattleshipsAPI;
 import game.BattleshipsAPIUtils;
 import game.Game;
+import game.board.Board;
 
 public class Main {
     public static void main(String[] args) {
-
+//        Board board = new Board();
 //        board.addShip(Ship.of(ShipType.CARRIER, Direction.HORIZONTAL, Position.of('A', 2)));
 //        //board.addShip(Ship.of(ShipType.BATTLESHIP, Direction.HORIZONTAL, Position.of('A', 7)));
 //        board.addShip(Ship.of(ShipType.BATTLESHIP, Direction.VERTICAL, Position.of('B', 2)));

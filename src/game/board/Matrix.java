@@ -42,6 +42,11 @@ public class Matrix implements Serializable {
         return board[i][y];
     }
 
+    public char get(char i, int y) {
+        return board[i-'A'][y];
+    }
+
+
     public char get(Position pos) {
         return get(pos.getX(), pos.getY());
     }

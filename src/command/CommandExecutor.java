@@ -9,6 +9,8 @@ import game.command.FileCommand;
 import game.file.MatrixManipulation;
 import game.ship.Ship;
 
+import java.util.Objects;
+
 public class CommandExecutor {
 
     /* ===================== FIRST COMMAND ======================= */
@@ -36,12 +38,12 @@ public class CommandExecutor {
     private final BattleshipsAPI game;
 
     Game gameplayed = null;
-    private boolean InGame = false;
+    private boolean inGame = false;
     public CommandExecutor(BattleshipsAPI game) {
         this.game = game;
     }
     public String execute(Command cmd) {
-        if (this.InGame) {
+        if (this.inGame) {
             return switch (cmd.command()) {
                 case ADD -> add(cmd.arguments());
                 case HIT -> hit(cmd.arguments());
@@ -71,7 +73,7 @@ public class CommandExecutor {
         } catch (GameDoesntExistException e) {
             return "The game doesn't exist!";
         }
-        Ship ship = Ship.of(arguments[2],arguments[3],arguments[4]);
+        Ship ship = Ship.of(arguments[2], arguments[3], arguments[4]);
         g.getMyBoard(arguments[1]).addShip(ship);
         return ship.type().toString();
     }
@@ -93,13 +95,13 @@ public class CommandExecutor {
 
     // start game0 pesho
     private String start(String[] arguments) {
-        this.InGame = true;
+        this.inGame = true;
         return print(arguments);
     }
 
     // exit
     private String exitGame() {
-        this.InGame = false;
+        this.inGame = false;
         return "Exit";
     }
 
@@ -113,6 +115,7 @@ public class CommandExecutor {
         }
         if (g.isCurrentTurn(arguments[1])) {
             g.getEnemyBoard(arguments[1]).hit(arguments[2]);
+            g.endTurn();
             return String.format("%s\n\n%s",
                     MatrixManipulation.getPrintableMatrix(
                     g.getEnemyBoard(arguments[1]), Player.ENEMY),
