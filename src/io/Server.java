@@ -17,12 +17,9 @@ import java.util.Iterator;
 public class Server {
     private static final int BUFFER_SIZE = 1024;
     private static final String HOST = "localhost";
-
     private final CommandExecutor commandExecutor;
-
     private final int port;
     private boolean isServerWorking;
-
     private ByteBuffer buffer;
     private Selector selector;
 

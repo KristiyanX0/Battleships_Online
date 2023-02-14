@@ -2,7 +2,6 @@
 import game.BattleshipsAPI;
 import game.BattleshipsAPIUtils;
 import game.Game;
-import game.Profile;
 
 public class Main {
     public static void main(String[] args) {

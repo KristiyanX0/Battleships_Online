@@ -6,7 +6,9 @@ import operations.StringOperation;
 import java.io.*;
 import java.nio.file.*;
 
-public class Command {
+public class FileCommand {
+
+    public static final String SAVED = "./src/files/game/Battleship";
     public static final String HELP_PATH = "./src/files/body/help";
     public static final String LEGEND_PATH = "./src/files/body/legend";
     public static final String GAME_PATH = "./src/files/game";

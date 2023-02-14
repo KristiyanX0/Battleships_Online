@@ -29,7 +29,7 @@ public class Client {
             System.out.println("Connected to the server!");
 
             while (true) {
-                System.out.print("=> ");
+                System.out.print("> ");
                 String message = scanner.nextLine(); // read a line from the console
 
                 writeClientInput(message, socketChannel);

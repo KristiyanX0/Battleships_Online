@@ -1,32 +1,54 @@
 package game;
 
-import exception.InvalidPasswordException;
-import exception.ProfileAlreadyExist;
-import exception.ProfileDoesntExist;
+import exception.*;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class BattleshipsAPI implements Serializable {
-    private final Map<String, Profile> profiles = new ConcurrentHashMap<>();
-    final Map<String, Game> games = new ConcurrentHashMap<>();
-    public Profile login(String name, String password) {
-        if (profiles.containsKey(name)) {
-            Profile prof = profiles.get(name);
-            if (prof.getPassword().equals(password)) {
-                return prof;
-            }
-            throw new InvalidPasswordException();
+    private final Map<String, Game> games = new ConcurrentHashMap<>();
+
+    public void createGame(String name, String playerName) {
+        if (!games.containsKey(name)) {
+            Game game = new Game(playerName);
+            games.put(name, game);
+        } else {
+            throw new GameAlreadyExistException();
         }
-        throw new ProfileDoesntExist();
     }
 
-    public void createProfile(String name, String password) {
-        if (profiles.containsKey(name)) {
-            throw new ProfileAlreadyExist();
+    public void join(String gameName, String playerName) {
+        if (!games.containsKey(gameName)) {
+            throw new GameDoesntExistException();
+        } else {
+            this.games.get(gameName).add(playerName);
         }
-        profiles.put(name, new Profile(name, password, this));
+    }
+
+    public Game getGameBoard(String gameName, String attackerName) {
+        if (!games.containsKey(gameName)) {
+            throw new GameDoesntExistException();
+        }
+        Game game = games.get(gameName);
+        if (!attackerName.equals(game.getPlayer1()) &&
+                !attackerName.equals(game.getPlayer2())) {
+            throw new InvalidGameObject();
+        }
+        return game;
+    }
+
+    public void removeGame(String name) {
+        games.remove(name);
+    }
+
+    public StringBuilder list() {
+        int i = 1;
+        StringBuilder format = new StringBuilder("");
+        for (var x : games.entrySet()) {
+            format.append(String.format("%s: Game - %s, Creator: %s, Joined Count: %s%s", i++, x.getKey(),
+                    x.getValue().getPlayer1(), x.getValue().getJoinedCount(), System.lineSeparator()));
+        }
+        return format;
     }
 }

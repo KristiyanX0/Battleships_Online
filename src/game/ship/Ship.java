@@ -1,6 +1,7 @@
 package game.ship;
 
 import exception.InvalidMappingException;
+import exception.InvalidShipTypeException;
 import game.ship.position.Position;
 import game.ship.position.PositionState;
 import constants.Direction;
@@ -24,6 +25,22 @@ public abstract class Ship {
 //            default -> throw new InvalidShipTypeException(String.format("Ship with the name %s doesn't exist",
 //                    shipType.toString()));
         };
+    }
+
+    public static Ship of(String shipType, String direction, String positionStart) {
+        ShipType shipType1 = switch (shipType) {
+            case "b" -> ShipType.BATTLESHIP;
+            case "c" -> ShipType.CARRIER;
+            case "d" -> ShipType.DESTROYER;
+            case "s" -> ShipType.SUBMARINE;
+            default -> throw new InvalidShipTypeException();
+        };
+        Direction direction1 = switch (direction) {
+            case "h" -> Direction.HORIZONTAL;
+            case "v" -> Direction.VERTICAL;
+            default -> throw new RuntimeException();
+        };
+        return of(shipType1, direction1, Position.of(positionStart));
     }
 
     protected Ship(ShipType shipType, Direction DIRECTION, Position POSITION_START, int size) {
