@@ -9,8 +9,6 @@ import game.command.FileCommand;
 import game.file.MatrixManipulation;
 import game.ship.Ship;
 
-import java.util.Objects;
-
 public class CommandExecutor {
 
     /* ===================== FIRST COMMAND ======================= */

@@ -43,7 +43,7 @@ public class Matrix implements Serializable {
     }
 
     public char get(char i, int y) {
-        return board[i-'A'][y];
+        return board[i - 'A'][y];
     }
 
 

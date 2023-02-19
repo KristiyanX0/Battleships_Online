@@ -44,19 +44,21 @@ public abstract class Ship implements Serializable {
         return of(shipType1, direction1, Position.of(positionStart));
     }
 
-    protected Ship(ShipType shipType, Direction DIRECTION, Position POSITION_START, int size) {
+    protected Ship(ShipType shipType, Direction direction, Position positionStart, int size) {
         this.SHIP_TYPE = shipType;
-        this.DIRECTION = DIRECTION;
+        this.DIRECTION = direction;
         this.SIZE = size;
 
-        positions.putIfAbsent(POSITION_START, PositionState.UNDAMAGED);
-        if (DIRECTION == Direction.HORIZONTAL) {
+        positions.putIfAbsent(positionStart, PositionState.UNDAMAGED);
+        if (direction == Direction.HORIZONTAL) {
             for (int i = 1; i < size; ++i) {
-                positions.putIfAbsent(Position.of(POSITION_START.getX(), POSITION_START.getY() + i), PositionState.UNDAMAGED);
+                positions.putIfAbsent(Position.of(positionStart.getX(), positionStart.getY() + i),
+                        PositionState.UNDAMAGED);
             }
         } else {
             for (int i = 1; i < size; ++i) {
-                positions.putIfAbsent(Position.of(POSITION_START.getX() + i, POSITION_START.getY()), PositionState.UNDAMAGED);
+                positions.putIfAbsent(Position.of(positionStart.getX() + i, positionStart.getY()),
+                        PositionState.UNDAMAGED);
             }
         }
     }

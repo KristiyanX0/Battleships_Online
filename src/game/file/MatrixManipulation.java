@@ -17,7 +17,7 @@ public class MatrixManipulation {
             for (int j = 0; j < Board.SIZE; ++j) {
                 str.append('|');
                 if (player == Player.ME) {
-                    str.append(matrix.get(i,j));
+                    str.append(matrix.get(i, j));
                 } else {
                     str.append((matrix.get(i, j) == Matrix.DAMAGE) ? Matrix.DAMAGE : Matrix.EMPTY);
                 }

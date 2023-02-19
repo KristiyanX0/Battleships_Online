@@ -6,11 +6,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Position implements Serializable {
+    private static final int LIMIT = 9;
     int x;
     int y;
 
     private Position(int x, int y) {
-        if (!(0 <= x && x <= 9) || !(0 <= y && y <= 9)) {
+        if (!(0 <= x && x <= LIMIT) || !(0 <= y && y <= LIMIT)) {
             throw new InvalidPositionException("Invalid position");
         }
         this.x = x;

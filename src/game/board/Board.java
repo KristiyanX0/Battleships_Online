@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 public class Board implements Serializable {
-    public static int SIZE = 10;
+    public final static int SIZE = 10;
     private final HashMap<Position, Ship> ships = new HashMap<>();
 
     Matrix matrix = new Matrix();

@@ -25,7 +25,8 @@ public class BattleshipsAPIUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(Files.newOutputStream(filePath, StandardOpenOption.CREATE))) {
+        try (ObjectOutputStream outputStream =
+                     new ObjectOutputStream(Files.newOutputStream(filePath, StandardOpenOption.CREATE))) {
             outputStream.writeObject(api);
         } catch (IOException e) {
             e.printStackTrace();
