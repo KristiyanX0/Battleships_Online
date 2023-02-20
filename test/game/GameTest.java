@@ -8,7 +8,7 @@ class GameTest {
 
     @Test
     void add() {
-        Game game = new Game("Kiko");
+        Game game = Game.of("Kiko");
         game.add("pesho");
         assertEquals(game.getPlayer2(), "pesho");
     }

@@ -1,4 +1,4 @@
-package game.file;
+package game.helper;
 
 import game.Player;
 import game.board.Board;

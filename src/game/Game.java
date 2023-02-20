@@ -9,17 +9,34 @@ public class Game implements Serializable {
     private boolean finished = false;
     private String player1 = null;
     private String player2 = null;
-    private final Board player1board = new Board();
-    private final Board player2board = new Board();
-
+    private Board player1board;
+    private Board player2board;
     private String currentTurn;
-    public Game(String player1) {
+
+    public static Game of(String player1) {
+        return Game.of(player1, new Board());
+    }
+    public static Game of(String player1, Board board1) {
+        return new Game(player1, board1);
+    }
+    private Game(String player1) {
         this.player1 = player1;
         currentTurn = player1;
+        this.player1board = new Board();
+    }
+
+    private Game(String player1, Board board1) {
+        this.player1 = player1;
+        currentTurn = player1;
+        this.player1board = board1;
     }
 
     public void add(String player2) {
+        add(player2, new Board());
+    }
+    public void add(String player2, Board board) {
         this.player2 = player2;
+        this.player2board = board;
     }
 
     public String getPlayer1() {

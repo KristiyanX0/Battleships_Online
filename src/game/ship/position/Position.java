@@ -49,6 +49,10 @@ public class Position implements Serializable {
                 '}';
     }
 
+    public String getPos() {
+        return String.format("%c%d", x + 'A', y);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

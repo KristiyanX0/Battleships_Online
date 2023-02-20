@@ -13,10 +13,12 @@ public class Client {
     private final int serverPort;
     private final String serverHost;
     private static ByteBuffer buffer;
+    private final String profile;
 
-    public Client(String serverHost, int serverPort, int bufferSize) {
+    public Client(String serverHost, int serverPort, int bufferSize, String profile) {
         this.serverPort = serverPort;
         this.serverHost = serverHost;
+        this.profile = profile;
         buffer = ByteBuffer.allocateDirect(bufferSize);
     }
 
@@ -28,19 +30,40 @@ public class Client {
 
             System.out.println("Connected to the server!");
 
+            String game = null;
+
             while (true) {
                 System.out.print("> ");
-                String message = scanner.nextLine(); // read a line from the console
+                String message = profile + " " + scanner.nextLine(); // read a line from the console
 
                 writeClientInput(message, socketChannel);
                 String reply = getServerReply(socketChannel);
+                if (reply.split(" ")[0].equals("STARTGAME")) {
+                    game = reply.split(" ")[1];
+                    while (true) {
+                        message = profile + "_" + game + " " + "print";
+                        writeClientInput(message, socketChannel);
+                        reply = getServerReply(socketChannel);
+                        System.out.println(reply);
 
+                        System.out.print("> ");
+                        String scannerWrite = scanner.nextLine();
+                        message = profile + "_" + game + " " + scannerWrite;
+                        if (scannerWrite.equals("exit")) {
+                            message = "GAMEEXIT";
+                            game = null;
+                            break;
+                        }
+                        writeClientInput(message, socketChannel);
+                        reply = getServerReply(socketChannel);
+                    }
+                }
                 if (CommandExecutor.DISCONNECTED.equals(message)) {
                     System.out.println(reply);
                     break;
+                } else if (!message.equals("GAMEEXIT")) {
+                    System.out.println(reply);
                 }
-
-                System.out.println(reply);
             }
 
         } catch (IOException e) {

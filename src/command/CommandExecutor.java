@@ -6,7 +6,7 @@ import game.BattleshipsAPIUtils;
 import game.Game;
 import game.Player;
 import game.command.FileCommand;
-import game.file.MatrixManipulation;
+import game.helper.MatrixManipulation;
 import game.ship.Ship;
 
 public class CommandExecutor {
@@ -22,8 +22,6 @@ public class CommandExecutor {
     /* =========================================================== */
 
     /* ========== SECOND COMMAND (DEPENDS ON FIRST ONE) ========== */
-    private static final String GAME = "game";
-    private static final String PROFILE = "profile";
     private static final String ADD = "add";
     /* =========================================================== */
 
@@ -35,90 +33,86 @@ public class CommandExecutor {
     public static final String DISCONNECTED = "Disconnected from the server";
     private final BattleshipsAPI game;
 
-    Game gameplayed = null;
-    private boolean inGame = false;
     public CommandExecutor(BattleshipsAPI game) {
         this.game = game;
     }
     public String execute(Command cmd) {
-        if (this.inGame) {
+        if (!cmd.game().isEmpty()) {
             return switch (cmd.command()) {
-                case ADD -> add(cmd.arguments());
-                case HIT -> hit(cmd.arguments());
+                case ADD -> add(cmd);
+                case HIT -> hit(cmd);
                 case EXIT -> exitGame();
-                case PRINT -> print(cmd.arguments());
+                case PRINT -> print(cmd);
                 default -> UNKNOWN_COMMAND;
             };
         } else {
             return switch (cmd.command()) {
-                case CREATE -> create(cmd.arguments());
-                case DELETE -> delete(cmd.arguments());
+                case CREATE -> create(cmd);
+                case DELETE -> delete(cmd);
                 case SAVE -> save();
                 case LIST -> list();
-                case JOIN -> join(cmd.arguments());
+                case JOIN -> join(cmd);
                 case EXIT -> exit();
-                case START -> start(cmd.arguments());
+                case START -> start(cmd);
                 default -> UNKNOWN_COMMAND;
             };
         }
     }
 
-    // example: add game0 pesho b h A2
-    private String add(String[] arguments) {
+    // add b h A2
+    private String add(Command cmd) {
+        String[] arguments = cmd.arguments();
+        String profile = cmd.username();
         Game g = null;
         try {
-            g = game.getGameBoard(arguments[0], arguments[1]);
+            g = game.getGameBoard(cmd.game(), profile);
         } catch (GameDoesntExistException e) {
             return "The game doesn't exist!";
         }
-        Ship ship = Ship.of(arguments[2], arguments[3], arguments[4]);
-        g.getMyBoard(arguments[1]).addShip(ship);
-        return ship.type().toString();
+        Ship ship = Ship.of(arguments[0], arguments[1], arguments[2]);
+        g.getMyBoard(profile).addShip(ship);
+        return ship.type().toString() + " " + arguments[2];
     }
 
-    // print game0 pesho
-    private String print(String[] arguments) {
+    // print
+    private String print(Command cmd) {
         Game g = null;
         try {
-            g = game.getGameBoard(arguments[0], arguments[1]);
+            g = game.getGameBoard(cmd.game(), cmd.username());
         } catch (GameDoesntExistException e) {
             return "The game doesn't exist!";
         }
         return String.format("%s\n\n%s",
                 MatrixManipulation.getPrintableMatrix(
-                        g.getEnemyBoard(arguments[1]), Player.ENEMY),
+                        g.getEnemyBoard(cmd.username()), Player.ENEMY),
                 MatrixManipulation.getPrintableMatrix(
-                        g.getMyBoard(arguments[1]), Player.ME));
+                        g.getMyBoard(cmd.username()), Player.ME));
     }
 
-    // start game0 pesho
-    private String start(String[] arguments) {
-        this.inGame = true;
-        return print(arguments);
+    // start game0
+    private String start(Command cmd) {
+        return "STARTGAME" + " " + cmd.arguments()[0];
     }
 
     // exit
     private String exitGame() {
-        this.inGame = false;
         return "Exit";
     }
 
-    // hit game0 pesho A2
-    private String hit(String[] arguments) {
+    // hit A2
+    private String hit(Command cmd) {
+        String profile = cmd.username();
+        String[] arguments = cmd.arguments();
         Game g = null;
         try {
-            g = game.getGameBoard(arguments[0], arguments[1]);
+            g = game.getGameBoard(cmd.game(), profile);
         } catch (GameDoesntExistException e) {
             return "The game doesn't exist!";
         }
-        if (g.isCurrentTurn(arguments[1])) {
-            g.getEnemyBoard(arguments[1]).hit(arguments[2]);
+        if (g.isCurrentTurn(profile)) {
+            g.getEnemyBoard(profile).hit(arguments[0]);
             g.endTurn();
-            return String.format("%s\n\n%s",
-                    MatrixManipulation.getPrintableMatrix(
-                    g.getEnemyBoard(arguments[1]), Player.ENEMY),
-                    MatrixManipulation.getPrintableMatrix(
-                            g.getMyBoard(arguments[1]), Player.ME));
+            return "HIT!";
         } else {
             return "NOT YOUR TURN!";
         }
@@ -131,18 +125,32 @@ public class CommandExecutor {
         BattleshipsAPIUtils.saveToFile(game, FileCommand.SAVED);
         return "* SAVED *";
     }
-    private String join(String[] arguments) {
-        game.join(arguments[0], arguments[1]);
-        return String.format("* JOINED: '%s' *", arguments[0]);
+    private String join(Command cmd) {
+        try {
+            if (cmd.arguments().length == 2) {
+                game.join(cmd.arguments()[0], cmd.username(),
+                        !cmd.arguments()[1].equals("add"));
+            } else if (cmd.arguments().length == 1) {
+                game.join(cmd.arguments()[0], cmd.username(), true);
+            }
+        } catch (GameDoesntExistException e) {
+            return "GameDesntExist!";
+        }
+        return String.format("* JOINED: '%s' *", cmd.arguments()[0]);
     }
 
-    private String delete(String[] arguments) {
-        game.removeGame(arguments[0]);
-        return String.format("* GAME: '%s' IS SUCCESSFULLY DELETED *", arguments[0]);
+    private String delete(Command cmd) {
+        game.removeGame(cmd.arguments()[0], cmd.username());
+        return String.format("* GAME: '%s' IS SUCCESSFULLY DELETED *", cmd.arguments()[0]);
     }
 
-    private String create(String[] arguments) {
-        game.createGame(arguments[0], arguments[1]);
+    private String create(Command cmd) {
+        if (cmd.arguments().length == 2) {
+            game.createGame(cmd.arguments()[0], cmd.username(),
+                    !cmd.arguments()[1].equals("add"));
+        } else if (cmd.arguments().length == 1) {
+            game.createGame(cmd.arguments()[0], cmd.username(), true);
+        }
         return "* NEW GAME SUCCESSFULLY CREATED *";
     }
 

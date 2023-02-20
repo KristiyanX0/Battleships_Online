@@ -1,4 +1,4 @@
-package game.file;
+package game.helper;
 
 import constants.Direction;
 import constants.ShipType;
