@@ -34,6 +34,7 @@ public class Board implements Serializable {
      */
     public boolean hit(Position pos) {
         if (!ships.containsKey(pos)) {
+            matrix.update(pos);
             return false;
         }
         boolean output = ships.get(pos).setDamage(pos);

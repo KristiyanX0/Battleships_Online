@@ -17,9 +17,25 @@ public class MatrixManipulation {
             for (int j = 0; j < Board.SIZE; ++j) {
                 str.append('|');
                 if (player == Player.ME) {
-                    str.append(matrix.get(i, j));
+                    char symbol;
+                    if (matrix.get(i, j) == Matrix.DAMAGE) {
+                        symbol = Matrix.DAMAGE;
+                    } else if (matrix.get(i, j) == Matrix.EMPTY_HIT) {
+                        symbol = Matrix.EMPTY;
+                    } else {
+                        symbol = matrix.get(i, j);
+                    }
+                    str.append(symbol);
                 } else {
-                    str.append((matrix.get(i, j) == Matrix.DAMAGE) ? Matrix.DAMAGE : Matrix.EMPTY);
+                    char symbol;
+                    if (matrix.get(i, j) == Matrix.DAMAGE) {
+                        symbol = Matrix.DAMAGE;
+                    } else if (matrix.get(i, j) == Matrix.EMPTY_HIT) {
+                        symbol = Matrix.EMPTY_HIT;
+                    } else {
+                        symbol = Matrix.EMPTY;
+                    }
+                    str.append(symbol);
                 }
             }
             str.append('|').append(System.lineSeparator());

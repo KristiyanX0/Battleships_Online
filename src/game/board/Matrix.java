@@ -12,6 +12,7 @@ public class Matrix implements Serializable {
 
     public static final char EMPTY = '-';
     public static final char DAMAGE = 'X';
+    public static final char EMPTY_HIT = 'O';
     private char[][] board = new char[Board.SIZE][Board.SIZE];
 
     public Matrix() {
@@ -36,6 +37,10 @@ public class Matrix implements Serializable {
                 board[pos.getX()][pos.getY()] = EMPTY;
             }
         }
+    }
+
+    public void update(Position pos) {
+        board[pos.getX()][pos.getY()] = 'O';
     }
 
     public char get(int i, int y) {

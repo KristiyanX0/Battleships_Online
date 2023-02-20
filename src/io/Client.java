@@ -56,6 +56,7 @@ public class Client {
                         }
                         writeClientInput(message, socketChannel);
                         reply = getServerReply(socketChannel);
+                        System.out.println(reply);
                     }
                 }
                 if (CommandExecutor.DISCONNECTED.equals(message)) {
