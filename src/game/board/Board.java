@@ -18,7 +18,7 @@ public class Board implements Serializable {
 
     public void addShip(Ship ship) {
         if (!SetOperation.intersection(ship.getPositions(), ships.keySet()).isEmpty()) {
-            throw new ShipIntersectionException();
+            throw new ShipIntersectionException("Ship Interception!");
         } else {
             for (var i : ship.getPositions()) {
                 ships.put(i, ship);

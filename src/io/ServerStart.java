@@ -3,10 +3,9 @@ package io;
 import command.CommandExecutor;
 import game.BattleshipsAPI;
 import game.BattleshipsAPIUtils;
-import game.command.FileCommand;
+import game.helper.FileCommand;
 
 public class ServerStart {
-
     public static final int SERVER_PORT = 16969;
 
     public static void main(String[] args) {

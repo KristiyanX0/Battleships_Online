@@ -7,11 +7,12 @@ import java.util.Objects;
 
 public class Game implements Serializable {
     private boolean finished = false;
-    private String player1 = null;
+    private final String player1;
     private String player2 = null;
-    private Board player1board;
+    private final Board player1board;
     private Board player2board;
     private String currentTurn;
+    private boolean started;
 
     public static Game of(String player1) {
         return Game.of(player1, new Board());
@@ -20,12 +21,16 @@ public class Game implements Serializable {
         return new Game(player1, board1);
     }
     private Game(String player1) {
+        this.started = false;
+        this.finished = false;
         this.player1 = player1;
         currentTurn = player1;
         this.player1board = new Board();
     }
 
     private Game(String player1, Board board1) {
+        this.started = false;
+        this.finished = false;
         this.player1 = player1;
         currentTurn = player1;
         this.player1board = board1;
@@ -95,5 +100,13 @@ public class Game implements Serializable {
             return player2board;
         }
         return null;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public void setToStarted() {
+        this.started = true;
     }
 }

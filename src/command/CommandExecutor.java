@@ -1,13 +1,15 @@
 package command;
 
-import exception.GameDoesntExistException;
+import exception.*;
 import game.BattleshipsAPI;
 import game.BattleshipsAPIUtils;
 import game.Game;
 import game.Player;
-import game.command.FileCommand;
+import game.helper.FileCommand;
+import game.helper.ErrorLogWriter;
 import game.helper.MatrixManipulation;
 import game.ship.Ship;
+
 
 public class CommandExecutor {
 
@@ -19,6 +21,7 @@ public class CommandExecutor {
     private static final String START = "start";
     private static final String JOIN = "join";
     private static final String PRINT = "print";
+    private static final String LOAD = "load";
     /* =========================================================== */
 
     /* ========== SECOND COMMAND (DEPENDS ON FIRST ONE) ========== */
@@ -54,6 +57,7 @@ public class CommandExecutor {
                 case JOIN -> join(cmd);
                 case EXIT -> exit();
                 case START -> start(cmd);
+                case LOAD -> load(cmd);
                 default -> UNKNOWN_COMMAND;
             };
         }
@@ -66,8 +70,10 @@ public class CommandExecutor {
         Game g = null;
         try {
             g = game.getGameBoard(cmd.game(), profile);
-        } catch (GameDoesntExistException e) {
-            return "The game doesn't exist!";
+        } catch (GameDoesntExistException |
+                 InvalidGameObject e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         Ship ship = Ship.of(arguments[0], arguments[1], arguments[2]);
         g.getMyBoard(profile).addShip(ship);
@@ -79,8 +85,10 @@ public class CommandExecutor {
         Game g = null;
         try {
             g = game.getGameBoard(cmd.game(), cmd.username());
-        } catch (GameDoesntExistException e) {
-            return "The game doesn't exist!";
+        } catch (GameDoesntExistException |
+                 InvalidGameObject e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         return String.format("%s\n\n%s",
                 MatrixManipulation.getPrintableMatrix(
@@ -91,7 +99,31 @@ public class CommandExecutor {
 
     // start game0
     private String start(Command cmd) {
-        return "STARTGAME" + " " + cmd.arguments()[0];
+        try {
+            if (game.startGame(cmd.arguments()[0], cmd.username())) {
+                return "STARTGAME" + " " + cmd.arguments()[0];
+            }
+        } catch (GameDoesntExistException |
+                 NotEnoughPlayersToStartException |
+                 PlayerCannotStartGameException e) {
+            ErrorLogWriter.log(e.toString(), FileCommand.LOG_FILE);
+            return e.getMessage();
+        }
+        return "INVALID CASE!";
+    }
+
+    private String load(Command cmd) {
+        try {
+            if (game.loadGame(cmd.arguments()[0])) {
+                return "STARTGAME" + " " + cmd.arguments()[0];
+            }
+        } catch (GameDoesntExistException |
+                 NotEnoughPlayersToStartException |
+                 PlayerCannotStartGameException e) {
+            ErrorLogWriter.log(e.toString(), FileCommand.LOG_FILE);
+            return e.getMessage();
+        }
+        return "INVALID CASE!";
     }
 
     // exit
@@ -106,8 +138,10 @@ public class CommandExecutor {
         Game g = null;
         try {
             g = game.getGameBoard(cmd.game(), profile);
-        } catch (GameDoesntExistException e) {
-            return "The game doesn't exist!";
+        } catch (GameDoesntExistException |
+                 InvalidGameObject e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         if (g.isCurrentTurn(profile)) {
             g.getEnemyBoard(profile).hit(arguments[0]);
@@ -133,23 +167,32 @@ public class CommandExecutor {
             } else if (cmd.arguments().length == 1) {
                 game.join(cmd.arguments()[0], cmd.username(), true);
             }
-        } catch (GameDoesntExistException e) {
-            return "GameDesntExist!";
+        } catch (GameDoesntExistException |
+                 GamePlayerAlredyDefined e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         return String.format("* JOINED: '%s' *", cmd.arguments()[0]);
     }
 
     private String delete(Command cmd) {
-        game.removeGame(cmd.arguments()[0], cmd.username());
+        if(!game.removeGame(cmd.arguments()[0], cmd.username())) {
+            return "Can't delete!";
+        }
         return String.format("* GAME: '%s' IS SUCCESSFULLY DELETED *", cmd.arguments()[0]);
     }
 
     private String create(Command cmd) {
-        if (cmd.arguments().length == 2) {
-            game.createGame(cmd.arguments()[0], cmd.username(),
-                    !cmd.arguments()[1].equals("add"));
-        } else if (cmd.arguments().length == 1) {
-            game.createGame(cmd.arguments()[0], cmd.username(), true);
+        try {
+            if (cmd.arguments().length == 2) {
+                game.createGame(cmd.arguments()[0], cmd.username(),
+                        !cmd.arguments()[1].equals("add"));
+            } else if (cmd.arguments().length == 1) {
+                game.createGame(cmd.arguments()[0], cmd.username(), true);
+            }
+        } catch (GameAlreadyExistException e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         return "* NEW GAME SUCCESSFULLY CREATED *";
     }
