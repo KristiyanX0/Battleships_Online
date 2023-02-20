@@ -20,9 +20,38 @@ public class Randomise {
         }
     }
 
-    private static boolean unavaiablePos() {
-
+    private static Set<Position> unavaiablePos(Board board, String dir, int size) {
+        Set<Position> pos = new HashSet<>();
+        for (var p : board.positions()) {
+            if (dir.equals("h")) {
+                pos.addAll(getPos(Position.of(p.getX(), Math.max(p.getY() - size + 1, 0)), p));
+            } else {
+                pos.addAll(getPos(Position.of(Math.max(p.getX() - size + 1, 0), p.getY()), p));
+            }
+        }
+        return pos;
     }
+
+    private static Set<Position> getPos(Position pos1, Position pos2) {
+        Set<Position> pos = new HashSet<>();
+        if (pos1.getX() == pos2.getX()) {
+            Position position = pos1;
+            while (position.equals(pos2)) {
+                pos.add(position);
+                position = Position.of(position.getX(), position.getY() + 1);
+            }
+            pos.add(position);
+        } else if (pos1.getY() == pos2.getY()) {
+            Position position = pos1;
+            while (position.equals(pos2)) {
+                pos.add(position);
+                position = Position.of(position.getX() + 1, position.getY());
+            }
+            pos.add(position);
+        }
+        return pos;
+    }
+
     private static Set<Position> getUniversum(Board board, String dir, int size) {
         Set<Position> pos = new HashSet<>();
         int sizeH = 0, sizeV = 0;
@@ -37,8 +66,8 @@ public class Randomise {
                 pos.add(Position.of(i, j));
             }
         }
-        Set<Position> originalUniversum = SetOperation.subtract(pos, board.positions());
-        return SetOperation.subtract(originalUniversum, );
+        Set<Position> firstSub = SetOperation.subtract(pos, unavaiablePos(board,dir, size));
+        return SetOperation.subtract(firstSub, board.positions());
     }
 
     private static String getRandomPlace(Board board, String dir, int size) {
