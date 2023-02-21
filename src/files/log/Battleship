@@ -12,3 +12,7 @@
 2023-02-21 02:13:31 - Game doesn't exist!
 2023-02-21 02:14:17 - You don't have access!
 2023-02-21 02:14:24 - Game doesn't exist!
+2023-02-21 14:14:34 - You don't have access!
+2023-02-21 14:15:45 - You don't have access!
+2023-02-21 14:35:07 - exception.GameIsNotStartedException: Game is not started!
+2023-02-21 14:35:28 - Invalid position

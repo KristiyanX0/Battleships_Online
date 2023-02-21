@@ -155,17 +155,18 @@ public class CommandExecutor {
         Game g = null;
         try {
             g = game.getGameBoard(cmd.game(), profile);
+            if (g.isCurrentTurn(profile)) {
+                g.getEnemyBoard(profile).hit(arguments[0]);
+                g.endTurn();
+                return "HIT!";
+            } else {
+                return "NOT YOUR TURN!";
+            }
         } catch (GameDoesntExistException |
-                 InvalidGameObject e) {
+                 InvalidGameObject |
+                InvalidPositionException e) {
             ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
             return e.getMessage();
-        }
-        if (g.isCurrentTurn(profile)) {
-            g.getEnemyBoard(profile).hit(arguments[0]);
-            g.endTurn();
-            return "HIT!";
-        } else {
-            return "NOT YOUR TURN!";
         }
     }
 
