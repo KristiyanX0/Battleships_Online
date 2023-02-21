@@ -5,3 +5,10 @@
 2023-02-21 00:01:29 - exception.NotEnoughPlayersToStartException: Not enough players to start!
 2023-02-21 00:10:53 - exception.NotEnoughPlayersToStartException: Not enough players to start!
 2023-02-21 00:20:19 - Game already exist!
+2023-02-21 01:07:14 - exception.PlayerCannotStartGameException: Player Cannot start game exception!
+2023-02-21 01:47:25 - Game already exist!
+2023-02-21 01:48:09 - exception.PlayerCannotStartGameException: Player Cannot start game exception!
+2023-02-21 02:03:06 - exception.GameIsNotStartedException: Game is not started!
+2023-02-21 02:13:31 - Game doesn't exist!
+2023-02-21 02:14:17 - You don't have access!
+2023-02-21 02:14:24 - Game doesn't exist!

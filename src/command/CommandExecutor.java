@@ -22,6 +22,8 @@ public class CommandExecutor {
     private static final String JOIN = "join";
     private static final String PRINT = "print";
     private static final String LOAD = "load";
+    private static final String AUTOSAVE = "autosave";
+
     /* =========================================================== */
 
     /* ========== SECOND COMMAND (DEPENDS ON FIRST ONE) ========== */
@@ -34,12 +36,16 @@ public class CommandExecutor {
     /* =========================================================== */
     private static final String UNKNOWN_COMMAND = "Unknown command";
     public static final String DISCONNECTED = "Disconnected from the server";
+    private boolean autosave = false;
     private final BattleshipsAPI game;
 
     public CommandExecutor(BattleshipsAPI game) {
         this.game = game;
     }
     public String execute(Command cmd) {
+        if (autosave) {
+            save();
+        }
         if (!cmd.game().isEmpty()) {
             return switch (cmd.command()) {
                 case ADD -> add(cmd);
@@ -50,6 +56,7 @@ public class CommandExecutor {
             };
         } else {
             return switch (cmd.command()) {
+                case AUTOSAVE-> autosave(cmd.arguments());
                 case CREATE -> create(cmd);
                 case DELETE -> delete(cmd);
                 case SAVE -> save();
@@ -61,6 +68,15 @@ public class CommandExecutor {
                 default -> UNKNOWN_COMMAND;
             };
         }
+    }
+
+    private String autosave(String[] arguments) {
+        if (arguments[0].equalsIgnoreCase("on")) {
+            autosave = true;
+        } else if (arguments[0].equalsIgnoreCase("off")) {
+            autosave = false;
+        }
+        return String.format("* AUTOSAVE: %S *", (autosave) ? "ON" : "OFF");
     }
 
     // add b h A2
@@ -105,7 +121,8 @@ public class CommandExecutor {
             }
         } catch (GameDoesntExistException |
                  NotEnoughPlayersToStartException |
-                 PlayerCannotStartGameException e) {
+                 PlayerCannotStartGameException |
+                 GameAlreadyStartedException e) {
             ErrorLogWriter.log(e.toString(), FileCommand.LOG_FILE);
             return e.getMessage();
         }
@@ -118,8 +135,8 @@ public class CommandExecutor {
                 return "STARTGAME" + " " + cmd.arguments()[0];
             }
         } catch (GameDoesntExistException |
-                 NotEnoughPlayersToStartException |
-                 PlayerCannotStartGameException e) {
+                 PlayerCannotStartGameException |
+                GameIsNotStartedException e) {
             ErrorLogWriter.log(e.toString(), FileCommand.LOG_FILE);
             return e.getMessage();
         }
@@ -176,8 +193,12 @@ public class CommandExecutor {
     }
 
     private String delete(Command cmd) {
-        if(!game.removeGame(cmd.arguments()[0], cmd.username())) {
-            return "Can't delete!";
+        try {
+            game.removeGame(cmd.arguments()[0], cmd.username());
+        } catch (GameDoesntExistException |
+                 DeniedAccessException e) {
+            ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
+            return e.getMessage();
         }
         return String.format("* GAME: '%s' IS SUCCESSFULLY DELETED *", cmd.arguments()[0]);
     }

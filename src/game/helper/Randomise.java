@@ -25,7 +25,7 @@ public class Randomise {
         for (var p : board.positions()) {
             if (dir.equals("h")) {
                 pos.addAll(getPos(Position.of(p.getX(), Math.max(p.getY() - size + 1, 0)), p));
-            } else {
+            } else if (dir.equals("v")){
                 pos.addAll(getPos(Position.of(Math.max(p.getX() - size + 1, 0), p.getY()), p));
             }
         }
@@ -67,7 +67,8 @@ public class Randomise {
             }
         }
         Set<Position> firstSub = SetOperation.subtract(pos, unavaiablePos(board,dir, size));
-        return SetOperation.subtract(firstSub, board.positions());
+        Set<Position> secondSub = SetOperation.subtract(firstSub, board.positions());
+        return SetOperation.subtract(secondSub, board.positions());
     }
 
     private static String getRandomPlace(Board board, String dir, int size) {
@@ -79,7 +80,8 @@ public class Randomise {
 
     public static Board randomisedBoard() {
         Board board = new Board();
-        String dir = Randomise.getRandomDirection();
+        String dir;
+        dir = Randomise.getRandomDirection();
         board.addShip(Ship.of("c", dir, Randomise.getRandomPlace(board, dir, ShipSize.CARRIER)));
         dir = Randomise.getRandomDirection();
         board.addShip(Ship.of("b", dir, Randomise.getRandomPlace(board, dir, ShipSize.BATTLESHIP)));
