@@ -63,8 +63,8 @@ public class BattleshipsAPI implements Serializable {
     public boolean removeGame(String name, String profileName) {
         if (!games.containsKey(name)) {
             throw new GameDoesntExistException("Game doesn't exist!");
-        } else if ((!Objects.isNull(games.get(name).getPlayer2())) &&
-                (games.get(name).getPlayer1().equals(profileName) ||
+        } else if (games.get(name).getPlayer1().equals(profileName) ||
+                ((!Objects.isNull(games.get(name).getPlayer2())) &&
                 games.get(name).getPlayer2().equals(profileName))) {
             games.remove(name);
             return true;
@@ -99,7 +99,7 @@ public class BattleshipsAPI implements Serializable {
             games.get(gameName).setToStarted();
             return true;
         } else {
-            throw new PlayerCannotStartGameException("Player Cannot start game exception!");
+            throw new PlayerCannotStartGameException("Player Cannot start game!");
         }
     }
 

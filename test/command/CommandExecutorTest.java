@@ -66,13 +66,13 @@ class CommandExecutorTest {
     @Test
     void TestExecuteHit() {
         BattleshipsAPI battleshipsAPI = new BattleshipsAPI();
-        battleshipsAPI.createGame("game0", "kiko");
-        battleshipsAPI.join("game0", "pesho");
+        battleshipsAPI.createGame("game0", "kiko", false);
+        battleshipsAPI.join("game0", "pesho", false);
         CommandExecutor commandExecutor = new CommandExecutor(battleshipsAPI);
-        commandExecutor.execute(new Command("kiko_game0" ,"start", "game0 kiko".split(" ")));
-        commandExecutor.execute(new Command("pesho_game0","add", " b h A2".split(" ")));
+        commandExecutor.execute(new Command("kiko_game0" ,"start", "game0".split(" ")));
+        commandExecutor.execute(new Command("pesho_game0","add", "b h A2".split(" ")));
         assertEquals("   0 1 2 3 4 5 6 7 8 9\n" +
-                        "A |-|-|X|-|-|-|-|-|-|-|\n" +
+                        "A |-|-|-|-|-|-|-|-|-|-|\n" +
                         "B |-|-|-|-|-|-|-|-|-|-|\n" +
                         "C |-|-|-|-|-|-|-|-|-|-|\n" +
                         "D |-|-|-|-|-|-|-|-|-|-|\n" +
@@ -95,6 +95,6 @@ class CommandExecutorTest {
                         "H |-|-|-|-|-|-|-|-|-|-|\n" +
                         "I |-|-|-|-|-|-|-|-|-|-|\n" +
                         "J |-|-|-|-|-|-|-|-|-|-|\n",
-                commandExecutor.execute(new Command("kiko_game0","hit", "A2".split(" "))));
+                commandExecutor.execute(new Command("kiko_game0","print", "".split(" "))));
     }
 }

@@ -51,6 +51,21 @@ public class Matrix implements Serializable {
         return board[i - 'A'][y];
     }
 
+    public boolean isFinished() {
+        int xCount = 0;
+        int letterCount = 0;
+        for (int i = 0; i < Board.SIZE; i++) {
+            for (int j = 0; j < Board.SIZE; j++) {
+                if (board[i][j] == 's' || board[i][j] == 'b' ||
+                        board[i][j] == 'c' || board[i][j] == 'd') {
+                    letterCount++;
+                } else if (board[i][j] == DAMAGE) {
+                    xCount++;
+                }
+            }
+        }
+        return xCount > 0 && letterCount == 0;
+    }
 
     public char get(Position pos) {
         return get(pos.getX(), pos.getY());

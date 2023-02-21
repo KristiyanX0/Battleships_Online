@@ -16,3 +16,19 @@
 2023-02-21 14:15:45 - You don't have access!
 2023-02-21 14:35:07 - exception.GameIsNotStartedException: Game is not started!
 2023-02-21 14:35:28 - Invalid position
+2023-02-21 14:45:56 - You don't have access!
+2023-02-21 14:46:19 - Game doesn't exist!
+2023-02-21 14:49:23 - exception.NotEnoughPlayersToStartException: Not enough players to start!
+2023-02-21 14:49:38 - exception.PlayerCannotStartGameException: Player Cannot start game exception!
+2023-02-21 14:51:31 - Game doesn't exist!
+2023-02-21 14:51:31 - Game doesn't exist!
+2023-02-21 14:51:33 - Game doesn't exist!
+2023-02-21 14:51:33 - Game doesn't exist!
+2023-02-21 14:51:52 - Game doesn't exist!
+2023-02-21 14:51:52 - Game doesn't exist!
+2023-02-21 14:52:37 - Game doesn't exist!
+2023-02-21 14:52:37 - Game doesn't exist!
+2023-02-21 14:54:01 - Game doesn't exist!
+2023-02-21 14:54:35 - Game doesn't exist!
+2023-02-21 15:09:21 - Game doesn't exist!
+2023-02-21 15:30:03 - exception.GameAlreadyStartedException: Game Already Started!

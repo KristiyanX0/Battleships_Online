@@ -101,8 +101,16 @@ public class CommandExecutor {
         Game g = null;
         try {
             g = game.getGameBoard(cmd.game(), cmd.username());
+            if (g.isFinished()) {
+                if (g.winnerIsPlayer1()) {
+                    return "PLAYER ONE WON!";
+                } else {
+                    return "PLAYER TWO WON!";
+                }
+            }
         } catch (GameDoesntExistException |
-                 InvalidGameObject e) {
+                 InvalidGameObject |
+                GameNotFinishedException e) {
             ErrorLogWriter.log(e.getMessage(), FileCommand.LOG_FILE);
             return e.getMessage();
         }

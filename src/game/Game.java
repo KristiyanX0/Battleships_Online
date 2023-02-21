@@ -1,5 +1,6 @@
 package game;
 
+import exception.GameNotFinishedException;
 import game.board.Board;
 
 import java.io.Serializable;
@@ -72,7 +73,17 @@ public class Game implements Serializable {
         }
     }
 
-    boolean isFinished() {
+    public boolean winnerIsPlayer1() {
+        if (finished) {
+            return player2board.getMatrix().isFinished();
+        }
+        throw new GameNotFinishedException("Game is not over!");
+    }
+
+    public boolean isFinished() {
+        finished = player1board.getMatrix().isFinished() ||
+                player2board.getMatrix().isFinished();
+
         return finished;
     }
 
