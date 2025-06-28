@@ -41,9 +41,9 @@ Battleships Online is a networked implementation of the classic Battleships game
 
 ### Network Communication
 The game uses Java NIO for non-blocking network communication:
-- ServerSocketChannel for accepting connections
-- SocketChannel for client communication
-- Selector for managing multiple client connections
+- `ServerSocketChannel` for accepting connections
+- `SocketChannel` for client communication
+- `Selector` for managing multiple client connections
 
 ### Game Logic
 - Ships are placed on a 10x10 grid
